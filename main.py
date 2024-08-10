@@ -1,13 +1,8 @@
 from fastapi import FastAPI
-
+from app.routes import v1 as v1routes
+from app.config.database import create_tables
 app = FastAPI()
 
+create_tables()
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
+app.include_router(v1routes.router)
