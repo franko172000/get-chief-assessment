@@ -1,4 +1,4 @@
-from typing import Dict, List, Type
+from typing import Type
 
 from fastapi import HTTPException
 from starlette import status
@@ -22,9 +22,7 @@ class TaskService(BaseService):
         if task.owner_id:
             new_task.owner_id = task.owner_id
             # check if user exists
-            if not UserRepository(self.db).get_user_by_id(task.owner_id):
-                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Error creating task: User does not "
-                                                                                  "exist")
+            UserRepository(self.db).find_or_fail_by_id(task.owner_id)
 
         return TaskRepository(self.db).create_task(new_task)
 
@@ -34,11 +32,15 @@ class TaskService(BaseService):
     def unassign(self, task_id: int) -> Task:
         return TaskRepository(self.db).unassign_tasks(task_id)
 
+    def assign(self, task_id: int, owner_id: int) -> Task:
+        UserRepository(self.db).find_or_fail_by_id(owner_id)
+        return TaskRepository(self.db).assign_tasks(task_id, owner_id)
+
     def update_task(self, user_id: int, task: TaskRequest) -> Task:
         return TaskRepository(self.db).update_task(user_id, task)
 
     def get_task(self, task_id: int) -> Task:
-        task = TaskRepository(self.db).get_task_by_id(task_id)
-        if not task:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Task not found')
-        return task
+        return TaskRepository(self.db).find_or_fail_by_id(task_id)
+
+    def delete_task(self, task_id: int) -> None:
+        return TaskRepository(self.db).delete_task(task_id)

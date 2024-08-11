@@ -1,14 +1,23 @@
+from enum import Enum
 from typing import Optional
 
 from pydantic import BaseModel
 
 
+class StatusEnum(str, Enum):
+    not_started = "not_started"
+    in_progress = "in_progress"
+    done = "done"
+    testing = "testing"
+    blocked = "blocked"
+
+
 class TaskRequest(BaseModel):
     title: str
     description: str
-    status: str
-    owner_id: Optional[int]
+    status: StatusEnum
+    owner_id: Optional[int] = None
 
 
 class AssignTaskRequest(BaseModel):
-    user_id: int
+    owner_id: int

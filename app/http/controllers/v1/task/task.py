@@ -1,8 +1,10 @@
 from typing import List
 
 from fastapi import APIRouter, Depends
+from starlette import status
+
 from app.core.db.database import get_db
-from app.http.controllers.v1.task.dto.task_request import TaskRequest
+from app.http.controllers.v1.task.dto.task_request import TaskRequest, AssignTaskRequest
 from app.http.controllers.v1.task.dto.task_response import TaskResponse
 from app.services.task_service import TaskService
 
@@ -24,6 +26,11 @@ async def get_task(task_id: int, db: get_db = Depends()):
     return TaskService(db).get_task(task_id)
 
 
+@task_router.delete('/{task_id}', status_code=status.HTTP_204_NO_CONTENT)
+async def get_task(task_id: int, db: get_db = Depends()):
+    return TaskService(db).delete_task(task_id)
+
+
 @task_router.get('/user/{user_id}', response_model=List[TaskResponse])
 async def list_user_tasks(user_id: int, db: get_db = Depends()):
     return TaskService(db).get_user_tasks(user_id)
@@ -32,3 +39,8 @@ async def list_user_tasks(user_id: int, db: get_db = Depends()):
 @task_router.patch('/{task_id}/unassign', response_model=TaskResponse)
 async def unassign_task(task_id: int, db: get_db = Depends()):
     return TaskService(db).unassign(task_id)
+
+
+@task_router.patch('/{task_id}/assign', response_model=TaskResponse)
+async def assign_task(task_id: int, data: AssignTaskRequest, db: get_db = Depends()):
+    return TaskService(db).assign(task_id, data.owner_id)

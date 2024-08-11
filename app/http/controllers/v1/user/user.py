@@ -10,10 +10,9 @@ from app.http.controllers.v1.user.dto.user_request import CreateUserRequest
 user_router = APIRouter()
 
 
-@user_router.post('/')
+@user_router.post('/', response_model=UserResponse)
 async def create_user(request: CreateUserRequest, db: get_db = Depends()):
-    _user_service = UserService(db)
-    return await _user_service.create_user(request)
+    return UserService(db).create_user(request)
 
 
 @user_router.get('/', response_model=List[UserResponse])
