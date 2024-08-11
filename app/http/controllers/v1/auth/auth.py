@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
-auth_router = APIRouter(prefix='/auth')
+auth_router = APIRouter()
 
 
 @auth_router.get('/')
 def hello():
-    return 'Hello World!'
+    return 'Hello World! from Auth!'

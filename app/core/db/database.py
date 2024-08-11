@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+
 SQLALCHEMY_DATABASE_URL = "sqlite:///./app.db"
 
 engine = create_engine(
@@ -26,5 +27,5 @@ def get_db():
         db.close()
 
 
-def create_tables():
-    Base.metadata.create_all(bind=engine)
+# def create_tables():
+#     modelBase.metadata.create_all(bind=engine)

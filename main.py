@@ -1,8 +1,12 @@
 from fastapi import FastAPI
-from app.routes import v1 as v1routes
-from app.config.database import create_tables
+
+from app.core.db.database import engine
+from app.http.controllers.v1 import router as v1router
+from app.persistence.models import Base as modelBase
+
+# from app.config.database import engine
 app = FastAPI()
 
-create_tables()
+modelBase.metadata.create_all(bind=engine)
 
-app.include_router(v1routes.router)
+app.include_router(v1router, prefix='/api')

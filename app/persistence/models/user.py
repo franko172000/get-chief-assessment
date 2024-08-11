@@ -1,15 +1,14 @@
-from datetime import datetime, UTC
 from typing import List
 
-from sqlalchemy import BaseModel, Integer, Column, String, DateTime, relationship
-from sqlalchemy.orm import Mapped
-
+from sqlalchemy import Column, String, Integer
+from sqlalchemy.orm import Mapped, relationship
 from .base_model import BaseModel
 
 
 class User(BaseModel):
     __tablename__ = 'users'
-    name = Column(String)
-    email = Column(String)
+    first_name = Column(String)
+    last_name = Column(String)
+    email = Column(String, unique=True)
     password = Column(String)
-    tasks: Mapped[List["Task"]] = relationship(back_populates='owner')
+    tasks= relationship("Task", back_populates='owner')
