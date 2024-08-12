@@ -18,5 +18,10 @@ async def create_user(request: CreateUserRequest, db: get_db = Depends()):
 @user_router.get('/', response_model=List[UserResponse])
 async def list_users(db: get_db = Depends()):
     _user_service = UserService(db)
-    return await _user_service.get_users()
+    return _user_service.get_users()
 
+
+@user_router.delete('/{user_id}')
+async def delete_user(user_id: int, db: get_db = Depends()):
+    UserService(db).delete_users(user_id)
+    return

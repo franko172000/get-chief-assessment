@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Type
 
 from sqlalchemy.orm import Session
@@ -22,9 +23,13 @@ class TaskRepository(BaseRepository):
     def list_user_tasks(self, user_id: int) -> list[Type[Task]]:
         return self.db.query(Task).filter_by(owner_id=user_id).all()
 
+    def list_tasks(self) -> list[Type[Task]]:
+        return self.db.query(Task).all()
+
     def unassign_tasks(self, task_id: int) -> Task:
         task = self.db.query(Task).filter(Task.id == task_id).first()
         task.owner_id = None
+        task.assigned_date = None
         self.db.commit()
         self.db.refresh(task)
         return task
@@ -32,6 +37,7 @@ class TaskRepository(BaseRepository):
     def assign_tasks(self, task_id: int, owner_id: int) -> Task:
         task = self.find_or_fail_by_id(task_id)
         task.owner_id = owner_id
+        task.assigned_date = datetime.now()
         self.db.commit()
         self.db.refresh(task)
         return task

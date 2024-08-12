@@ -16,7 +16,10 @@ class TaskService(BaseService):
         new_task = Task(
             title=task.title,
             description=task.description,
-            status=task.status
+            status=task.status,
+            priority=task.priority,
+            due_date=task.due_date,
+            assigned_date=task.assigned_date,
         )
 
         if task.owner_id:
@@ -28,6 +31,9 @@ class TaskService(BaseService):
 
     def get_user_tasks(self, user_id: int) -> list[Type[Task]]:
         return TaskRepository(self.db).list_user_tasks(user_id)
+
+    def get_tasks(self) -> list[Type[Task]]:
+        return TaskRepository(self.db).list_tasks()
 
     def unassign(self, task_id: int) -> Task:
         return TaskRepository(self.db).unassign_tasks(task_id)

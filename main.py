@@ -1,20 +1,9 @@
-from fastapi import FastAPI
-
-from app.core.db.database import engine
-from app.http.controllers.v1 import router as v1router
-from app.persistence.models import Base as modelBase
-from fastapi.middleware.cors import CORSMiddleware
-
-app = FastAPI()
-
-app.add_middleware(
-        CORSMiddleware,
-        allow_origins=["*"],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
+import uvicorn
+if __name__ == "__main__":
+    uvicorn.run(
+        app="app:app",
+        # host=config.APP_HOST,
+        # port=config.APP_PORT,
+        # reload=True if config.ENV != "production" else False,
+        # workers=1,
     )
-
-modelBase.metadata.create_all(bind=engine)
-
-app.include_router(v1router, prefix='/api')

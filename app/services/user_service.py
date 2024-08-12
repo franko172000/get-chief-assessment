@@ -17,3 +17,6 @@ class UserService(BaseService):
 
     def get_users(self):
         return UserRepository(self.db).list_users()
+
+    def delete_users(self, user_id):
+        return UserRepository(self.db).delete_user(user_id)

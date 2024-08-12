@@ -21,4 +21,4 @@ class AuthService(BaseService):
         return AuthJWTTokenHandler.sign_jwt(user.id)
 
     def logout(self):
-        return UserRepository(self.db).list_users()
+        pass

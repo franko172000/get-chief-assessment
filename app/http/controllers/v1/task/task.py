@@ -11,9 +11,14 @@ from app.services.task_service import TaskService
 task_router = APIRouter()
 
 
-@task_router.post('/', response_model=TaskResponse)
+@task_router.post('', response_model=TaskResponse)
 def create_task(data: TaskRequest, db: get_db = Depends()):
     return TaskService(db).create_task(data)
+
+
+@task_router.get('', response_model=List[TaskResponse])
+async def list_tasks(db: get_db = Depends()):
+    return TaskService(db).get_tasks()
 
 
 @task_router.put('/{task_id}', response_model=TaskResponse)

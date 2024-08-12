@@ -1,10 +1,9 @@
 import time
-from typing import Union, cast
+from typing import Union
 
 import jwt
 
 from app.config import app_config
-from app.core.types.jwt_payload import JwtPayload
 from app.http.controllers.v1.auth.dto.auth_response import TokenResponse
 
 
